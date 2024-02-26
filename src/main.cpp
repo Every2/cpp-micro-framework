@@ -1,5 +1,7 @@
-#include <iostream>
+#include "../include/http.hpp"
 
 int main() {
-  std::cout << "" << '\n';
+    Http server(8080, "Hello World!");
+    server.run();
+    return 0;
 }
