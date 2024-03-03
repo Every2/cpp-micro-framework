@@ -1,13 +1,24 @@
 #include "../include/http.hpp"
 
-std::string Http::make_response(std::string& message) {
+std::string Http::make_response_html(std::string& message) {
     std::ostringstream response;
     response << "HTTP/1.1 200 OK\r\n"
-         << "Content-Length: " << message.length() << "\r\n" 
-         <<  "\r\n"
-         << message;
+             << "Content-Type: text/html\r\n" 
+             << "Content-Length: " << message.length() << "\r\n" 
+             <<  "\r\n"
+             << message;
     return response.str();
-} 
+}
+
+std::string Http::make_response_text(std::string& message) {
+    std::ostringstream response;
+    response << "HTTP/1.1 200 OK\r\n"
+             << "Content-Type: text/plain\r\n" 
+             << "Content-Length: " << message.length() << "\r\n" 
+             <<  "\r\n"
+             << message;
+    return response.str();
+}
 
 int Http::get_port() {
     return protocol_port;
@@ -17,6 +28,9 @@ std::string Http::get_message() {
     return protocol_message;
 }
 
+const char * Http::get_message() const {
+    return protocol_message.c_str();
+}
 
 int Http::run() {
     std::cout << get_port() << '\n';
@@ -60,7 +74,7 @@ int Http::run() {
         std::cout << "Received: " << buffer << '\n';
 
         
-        std::string response {make_response(protocol_message)};
+        std::string response {make_response_html(protocol_message)};
         send(new_socket, response.c_str(), response.length(), 0);
         std::cout << "Response sent" << '\n';
 
